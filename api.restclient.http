@@ -1,0 +1,40 @@
+# Settings
+@apiUrl = http://localhost:8000/api
+
+### Get random shibes
+# @name randomShibes
+GET http://localhost:8000/api/shibes/random/4
+
+### New User
+# @name user
+POST {{apiUrl}}/users
+Content-Type: application/json
+
+{
+}
+
+### New Favourite Shibe
+@shibe = {{randomShibes.response.body.$.urls[0]}}
+@userId = /api/users/{{user.response.body.$.id}}
+POST {{apiUrl}}/shibes
+Content-Type: application/json
+
+{
+  "url": "{{shibe}}",
+  "user": "{{userId}}"
+}
+
+
+### Get all users
+GET {{apiUrl}}/users
+
+### Get all shibes
+GET {{apiUrl}}/shibes?itemsPerPage=4&page=3
+
+### Get all saved shibes for user
+# @name userData
+GET {{apiUrl}}/shibes?user={{userId}}
+
+### Delete favourite Shibe
+@shibeId = {{userData.response.body.$.hydra:member[0].id}}
+DELETE {{apiUrl}}/shibes/{{shibeId}}
